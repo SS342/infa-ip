@@ -1,9 +1,13 @@
 from flask import Flask, render_template
 from flask import request as flask_request
 from static.modules.DataBase import DataBase
+import configparser
+
+config = configparser.ConfigParser()
+config.read("config.ini")
 
 
-DB = DataBase(path=r"./static/db/main.db")
+DB = DataBase(config["DataBase"]["path"])
 DB.CreateTableEmailPredReg()
 DB.CreateTableDevBlog()
 DB.CreateTableBugs()
@@ -98,6 +102,8 @@ def Contact():
 def guides_eat():
     return render_template('guide/eat.html')
 
+__debug = config["Server"]["debug"]
+__port = config["Server"]["port"]
 
 if __name__ == '__main__':
-    app.run(debug=True, port=80)
+    app.run(debug=__debug, port=__port)
